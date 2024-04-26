@@ -42,8 +42,8 @@ public class HibernateTaskRepository implements TaskRepository {
         try {
             session.beginTransaction();
             result = session.createMutationQuery("UPDATE Task SET title = :fTitle,"
-                            + "description = :fDescription,"
-                            + "done = :fDone WHERE id = :fId")
+                            + " description = :fDescription,"
+                            + " done = :fDone WHERE id = :fId")
                     .setParameter("fTitle", task.getTitle())
                     .setParameter("fDescription", task.getDescription())
                     .setParameter("fDone", task.isDone())
@@ -98,7 +98,8 @@ public class HibernateTaskRepository implements TaskRepository {
             session.beginTransaction();
             LocalDateTime today = LocalDate.now().atStartOfDay();
             Query<Task> query =
-                    session.createQuery("FROM Task WHERE created >= :fToday", Task.class);
+                    session.createQuery("FROM Task WHERE created >= :fToday"
+                            + " ORDER BY id DESC", Task.class);
             query.setParameter("fToday", today);
             tasks = query.list();
             session.getTransaction().commit();
@@ -116,7 +117,8 @@ public class HibernateTaskRepository implements TaskRepository {
         List<Task> tasks = new ArrayList<>();
         try {
             session.beginTransaction();
-            Query<Task> query = session.createQuery("FROM Task WHERE done = true", Task.class);
+            Query<Task> query = session.createQuery("FROM Task WHERE done = true"
+                    + " ORDER BY id DESC", Task.class);
             tasks = query.list();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -133,7 +135,7 @@ public class HibernateTaskRepository implements TaskRepository {
         List<Task> tasks = new ArrayList<>();
         try {
             session.beginTransaction();
-            tasks = session.createQuery("FROM Task", Task.class).list();
+            tasks = session.createQuery("FROM Task ORDER BY id DESC", Task.class).list();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
