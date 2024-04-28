@@ -77,17 +77,17 @@ public class HibernateTaskRepository implements TaskRepository {
     @Override
     public Optional<Task> findById(int id) {
         Session session = sf.openSession();
-        Task task = null;
+        Optional<Task> task = Optional.empty();
         try {
             session.beginTransaction();
-            task = session.get(Task.class, id);
+            task = Optional.of(session.get(Task.class, id));
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
-        return Optional.ofNullable(task);
+        return task;
     }
 
     @Override
