@@ -71,7 +71,7 @@ public class TaskController {
     @GetMapping("/task/{id}/done")
     public String done(@PathVariable int id) {
         Task task = taskService.findById(id).orElseThrow();
-        task.setDone(true);
+        task.setDone(!task.isDone());
         taskService.edit(task);
         return "redirect:/tasks/all";
     }
