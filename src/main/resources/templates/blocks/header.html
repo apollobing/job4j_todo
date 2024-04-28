@@ -1,0 +1,15 @@
+<div th:fragment="header">
+    <nav class="fixed-top navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Job4jTodo</a>
+            <div class="collapse navbar-collapse">
+                <div class="navbar-nav me-auto">
+                    <a class="nav-item nav-link active" th:href="@{/tasks/all}">All</a>
+                    <a class="nav-item nav-link" th:href="@{/tasks/completed}">Completed</a>
+                    <a class="nav-item nav-link" th:href="@{/tasks/new}">New</a>
+                    <a class="btn btn-success ml-3" th:href="@{/tasks/task/add}">Add</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>

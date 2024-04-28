@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+        <script th:src="@{/js/popper-2.11.8.min_npmjs.com.js}"></script>
+        <script th:src="@{/js/bootstrap.min.js}"></script>
+        <link th:href="@{/font/bootstrap-icons-1.11.3.css}" rel="stylesheet">
+
+        <title>Edit the task</title>
+    </head>
+    <body>
+        <div class="container-fluid p-0">
+            <header th:insert="~{blocks/header :: header}"></header>
+
+            <div class="container pt-5 pb-5">
+                <form class="pt-4 pb-4" th:action="@{/tasks/task/{id}/edit (id=${task.id})}" method="post" th:object="${task}">
+                    <input type="hidden" name="id" th:field="*{id}">
+                    <input type="hidden" name="id" th:field="*{done}">
+                    <div class="mb-3">
+                        <label for="title" class="form-label"><b>Title</b></label>
+                        <input type="text" class="form-control" id="title" name="title" th:field="*{title}"
+                               placeholder="Title of a task">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label"><b>Description</b></label>
+                        <textarea class="form-control" id="description" name="description" th:field="*{description}"
+                                  rows="10" placeholder="Write a task details"></textarea>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-6"></div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button class="btn btn-primary w-100" type="submit">Save</button>
+                                </div>
+                                <div class="col-6">
+                                    <a class="btn btn-danger w-100" th:href="@{/tasks/all}">Cancel</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <footer th:insert="~{blocks/footer :: footer}"></footer>
+        </div>
+    </body>
+</html>
