@@ -11,7 +11,7 @@ public interface TaskRepository {
 
     boolean edit(Task task);
 
-    void deleteById(int id);
+    boolean deleteById(int id);
 
     Optional<Task> findById(int id);
 

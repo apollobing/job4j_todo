@@ -77,8 +77,12 @@ public class TaskController {
     }
 
     @GetMapping("/task/{id}/delete")
-    public String delete(@PathVariable int id) {
-        taskService.deleteById(id);
+    public String delete(@PathVariable int id, Model model) {
+        boolean isDeleted = taskService.deleteById(id);
+        if (!isDeleted) {
+            model.addAttribute("message", "Task with this id not found");
+            return "errors/error";
+        }
         return "redirect:/tasks/all";
     }
 

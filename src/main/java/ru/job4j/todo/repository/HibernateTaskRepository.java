@@ -59,19 +59,21 @@ public class HibernateTaskRepository implements TaskRepository {
     }
 
     @Override
-    public void deleteById(int id) {
+    public boolean deleteById(int id) {
         Session session = sf.openSession();
+        boolean result = false;
         try {
             session.beginTransaction();
-            Task task = new Task();
-            task.setId(id);
-            session.remove(task);
+            result = session.createMutationQuery("DELETE Task WHERE id = :fId")
+                    .setParameter("fId", id)
+                    .executeUpdate() > 0;
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
+        return result;
     }
 
     @Override
