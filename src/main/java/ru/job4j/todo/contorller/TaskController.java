@@ -45,7 +45,8 @@ public class TaskController {
         Optional<Task> task = taskService.findById(id);
         if (task.isEmpty()) {
             response.setStatus(HttpStatus.NOT_FOUND.value());
-            model.addAttribute("message", "Task with this id not found");
+            model.addAttribute("message", "Can't get task with id=" + id
+                    + " because this task not found");
             return "errors/error";
         }
         model.addAttribute("task", task.get());
@@ -80,7 +81,8 @@ public class TaskController {
     public String delete(@PathVariable int id, Model model) {
         boolean isDeleted = taskService.deleteById(id);
         if (!isDeleted) {
-            model.addAttribute("message", "Task with this id not found");
+            model.addAttribute("message", "Can't delete task with id=" + id
+                    + " because this task not found");
             return "errors/error";
         }
         return "redirect:/tasks/all";
@@ -97,7 +99,8 @@ public class TaskController {
         try {
             boolean isUpdated = taskService.edit(task);
             if (!isUpdated) {
-                model.addAttribute("message", "Task with this id not found");
+                model.addAttribute("message", "Can't edit task with id=" + task.getId()
+                        + " because this task not found");
                 return "errors/error";
             }
             return "redirect:/tasks/task/" + task.getId();
