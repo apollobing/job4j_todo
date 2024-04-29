@@ -59,14 +59,9 @@ public class TaskController {
     }
 
     @PostMapping("/task/add")
-    public String create(@ModelAttribute Task task, Model model) {
-        try {
-            taskService.add(task);
-            return "redirect:/tasks/all";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
-            return "errors/error";
-        }
+    public String create(@ModelAttribute Task task) {
+        taskService.add(task);
+        return "redirect:/tasks/all";
     }
 
     @GetMapping("/task/{id}/done")
@@ -99,17 +94,12 @@ public class TaskController {
 
     @PostMapping("/task/{id}/edit")
     public String edit(@ModelAttribute Task task, Model model) {
-        try {
-            boolean isUpdated = taskService.edit(task);
-            if (!isUpdated) {
-                model.addAttribute("message", "Can't edit task with id=" + task.getId()
-                        + " because this task not found");
-                return "errors/error";
-            }
-            return "redirect:/tasks/task/" + task.getId();
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
+        boolean isUpdated = taskService.edit(task);
+        if (!isUpdated) {
+            model.addAttribute("message", "Can't edit task with id=" + task.getId()
+                    + " because this task not found");
             return "errors/error";
         }
+        return "redirect:/tasks/task/" + task.getId();
     }
 }
