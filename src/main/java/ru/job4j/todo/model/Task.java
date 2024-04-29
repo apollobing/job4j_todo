@@ -9,28 +9,22 @@ import java.time.LocalDateTime;
 @Table(name = "tasks")
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class Task {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
+    @EqualsAndHashCode.Include
     private int id;
 
-    @Getter
-    @Setter
     private String title;
 
-    @Getter
-    @Setter
     private String description;
 
-    @Getter
-    @Setter
     private LocalDateTime created = LocalDateTime.now().withNano(0);
 
-    @Getter
-    @Setter
     private boolean done;
 }
