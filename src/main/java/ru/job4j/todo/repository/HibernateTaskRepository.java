@@ -82,7 +82,9 @@ public class HibernateTaskRepository implements TaskRepository {
         Optional<Task> task = Optional.empty();
         try {
             session.beginTransaction();
-            task = Optional.of(session.get(Task.class, id));
+            Query<Task> query = session.createQuery("FROM Task WHERE id = :fId", Task.class);
+            query.setParameter("fId", id);
+            task = query.uniqueResultOptional();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
