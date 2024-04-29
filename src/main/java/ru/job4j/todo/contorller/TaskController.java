@@ -70,10 +70,13 @@ public class TaskController {
     }
 
     @GetMapping("/task/{id}/done")
-    public String done(@PathVariable int id) {
-        Task task = taskService.findById(id).orElseThrow();
-        task.setDone(!task.isDone());
-        taskService.edit(task);
+    public String changeStatus(@PathVariable int id, Model model) {
+        boolean isChanged = taskService.changeStatus(id);
+        if (!isChanged) {
+            model.addAttribute("message", "Can't change status of task with id=" + id
+                    + " because this task not found");
+            return "errors/error";
+        }
         return "redirect:/tasks/all";
     }
 
