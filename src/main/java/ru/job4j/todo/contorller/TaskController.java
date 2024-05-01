@@ -88,12 +88,13 @@ public class TaskController {
 
     @GetMapping("/task/{id}/edit")
     public String getEditPage(Model model, @PathVariable int id) {
-        if (taskService.findById(id).isEmpty()) {
+        Optional<Task> task = taskService.findById(id);
+        if (task.isEmpty()) {
             model.addAttribute("message", "Can't edit task with id=" + id
                     + " because this task not found");
             return "errors/error";
         }
-        model.addAttribute("task", taskService.findById(id).get());
+        model.addAttribute("task", task.get());
         return "tasks/edit";
     }
 
