@@ -1,5 +1,7 @@
 package ru.job4j.todo.contorller;
 
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,11 +30,13 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(Model model, @ModelAttribute User user) {
+    public String register(Model model, @ModelAttribute User user, HttpServletResponse response) {
         var savedUser = userService.save(user);
         if (savedUser.isEmpty()) {
-            model.addAttribute("message", "DB already has user with the same email");
-            return "errors/error";
+            response.setStatus(HttpStatus.CONFLICT.value());
+            model.addAttribute("user", new User());
+            model.addAttribute("error", "User with the same email already exists");
+            return "users/register";
         }
         return "redirect:/index";
     }

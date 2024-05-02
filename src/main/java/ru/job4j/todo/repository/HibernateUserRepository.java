@@ -26,13 +26,14 @@ public class HibernateUserRepository implements UserRepository {
             session.beginTransaction();
             session.persist(user);
             session.getTransaction().commit();
+            return Optional.of(user);
         } catch (Exception e) {
             session.getTransaction().rollback();
-            LOG.error("DB already has user with the same email", e);
+            LOG.error("User with the same email already exists", e);
         } finally {
             session.close();
         }
-        return Optional.ofNullable(user);
+        return Optional.empty();
     }
 
     @Override
