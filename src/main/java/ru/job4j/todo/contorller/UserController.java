@@ -14,6 +14,8 @@ import ru.job4j.todo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -31,7 +33,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(Model model, @ModelAttribute User user, HttpServletResponse response) {
-        var savedUser = userService.save(user);
+        Optional<User> savedUser = userService.save(user);
         if (savedUser.isEmpty()) {
             response.setStatus(HttpStatus.CONFLICT.value());
             model.addAttribute("user", new User());
@@ -48,13 +50,13 @@ public class UserController {
 
     @PostMapping("/login")
     public String loginUser(@ModelAttribute User user, Model model, HttpServletRequest request) {
-        var userOptional = userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
-        if (userOptional.isEmpty()) {
+        Optional<User> foundUser = userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
+        if (foundUser.isEmpty()) {
             model.addAttribute("error", "Email or password is incorrect");
             return "users/login";
         }
-        var session = request.getSession();
-        session.setAttribute("user", userOptional.get());
+        HttpSession session = request.getSession();
+        session.setAttribute("user", foundUser.get());
         return "redirect:/index";
     }
 

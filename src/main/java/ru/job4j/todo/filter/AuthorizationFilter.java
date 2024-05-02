@@ -17,12 +17,12 @@ public class AuthorizationFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        var uri = request.getRequestURI();
+        String uri = request.getRequestURI();
         if (isAlwaysPermitted(uri)) {
             chain.doFilter(request, response);
             return;
         }
-        var userLoggedIn = request.getSession().getAttribute("user") != null;
+        boolean userLoggedIn = request.getSession().getAttribute("user") != null;
         if (!userLoggedIn) {
             String loginPageUrl = request.getContextPath() + "/users/login";
             response.sendRedirect(loginPageUrl);
