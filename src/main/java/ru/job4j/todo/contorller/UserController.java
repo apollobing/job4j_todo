@@ -36,7 +36,6 @@ public class UserController {
         Optional<User> savedUser = userService.save(user);
         if (savedUser.isEmpty()) {
             response.setStatus(HttpStatus.CONFLICT.value());
-            model.addAttribute("user", new User());
             model.addAttribute("error", "User with the same email already exists");
             return "users/register";
         }

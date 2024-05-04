@@ -9,11 +9,11 @@
                     <a class="nav-item nav-link" th:href="@{/tasks/new}">New</a>
                     <a class="btn btn-success ms-3" th:href="@{/tasks/task/add}">Add</a>
                 </div>
-                <div class="navbar-nav ml-auto" th:if="${user.name == 'Guest' || user.name == null}">
+                <div class="navbar-nav ml-auto" th:if="${user.name == 'Guest' || user.name == null || error != null}">
                     <a class="nav-link text-secondary" th:href="@{/users/register}">Register</a>
                     <a class="nav-link text-secondary" th:href="@{/users/login}">Login</a>
                 </div>
-                <div class="navbar-nav ml-auto" th:if="${user.name != 'Guest' && user.name != null}">
+                <div class="navbar-nav ml-auto" th:if="${user.name != 'Guest' && user.name != null && error == null}">
                     <a class="nav-link text-secondary" href="#" th:text="${user.name}"></a>
                     <a class="nav-link text-secondary" th:href="@{/users/logout}">Logout</a>
                 </div>
