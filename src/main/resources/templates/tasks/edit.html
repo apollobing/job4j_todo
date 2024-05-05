@@ -18,7 +18,7 @@
             <div class="container pt-5 pb-5">
                 <form class="pt-4 pb-4" th:action="@{/tasks/task/{id}/edit (id=${task.id})}" method="post" th:object="${task}">
                     <input type="hidden" name="id" th:field="*{id}">
-                    <input type="hidden" name="id" th:field="*{done}">
+                    <input type="hidden" name="done" th:field="*{done}">
                     <div class="mb-3">
                         <label for="title" class="form-label"><b>Title</b></label>
                         <input type="text" class="form-control" id="title" name="title" th:field="*{title}"

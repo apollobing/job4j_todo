@@ -21,6 +21,7 @@
                         <tr>
                             <th scope="col">Title</th>
                             <th scope="col">Creation date</th>
+                            <th scope="col">User</th>
                             <th scope="col">Done</th>
                         </tr>
                     </thead>
@@ -30,6 +31,7 @@
                                th:href="@{/tasks/task/{taskId}(taskId=${task.id})}"></a>
                         </td>
                         <td th:text="${task.created}"/>
+                        <td th:text="${task.user.name}"/>
                         <td>
                             <span th:if="${task.done}">
                                 <i class="bi bi-check h5 text-success"></i>
