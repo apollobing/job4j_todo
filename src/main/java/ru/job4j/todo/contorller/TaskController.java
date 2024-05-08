@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.todo.dto.TaskDto;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import java.util.Optional;
@@ -19,8 +21,11 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    public TaskController(TaskService taskService) {
+    private final PriorityService priorityService;
+
+    public TaskController(TaskService taskService, PriorityService priorityService) {
         this.taskService = taskService;
+        this.priorityService = priorityService;
     }
 
     @GetMapping("/all")
@@ -50,19 +55,21 @@ public class TaskController {
                     + " because this task not found");
             return "errors/error";
         }
+        model.addAttribute("priorities", priorityService.findAll());
         model.addAttribute("task", task.get());
         return "tasks/one";
     }
 
     @GetMapping("/task/add")
-    public String getAddPage() {
+    public String getAddPage(Model model) {
+        model.addAttribute("priorities", priorityService.findAll());
         return "tasks/add";
     }
 
     @PostMapping("/task/add")
-    public String create(@ModelAttribute Task task, @SessionAttribute User user) {
-        task.setUser(user);
-        taskService.add(task);
+    public String create(@ModelAttribute TaskDto taskDto, @SessionAttribute User user) {
+        taskDto.setUser(user);
+        taskService.add(taskDto);
         return "redirect:/tasks/all";
     }
 
@@ -96,18 +103,19 @@ public class TaskController {
                     + " because this task not found");
             return "errors/error";
         }
+        model.addAttribute("priorities", priorityService.findAll());
         model.addAttribute("task", task.get());
         return "tasks/edit";
     }
 
     @PostMapping("/task/{id}/edit")
-    public String edit(@ModelAttribute Task task, Model model) {
-        boolean isUpdated = taskService.edit(task);
+    public String edit(@ModelAttribute TaskDto taskDto, Model model) {
+        boolean isUpdated = taskService.edit(taskDto);
         if (!isUpdated) {
-            model.addAttribute("message", "Can't edit task with id=" + task.getId()
+            model.addAttribute("message", "Can't edit task with id=" + taskDto.getId()
                     + " because this task not found");
             return "errors/error";
         }
-        return "redirect:/tasks/task/" + task.getId();
+        return "redirect:/tasks/task/" + taskDto.getId();
     }
 }

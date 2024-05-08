@@ -25,9 +25,16 @@
                                placeholder="Title of a task">
                     </div>
                     <div class="mb-3">
+                        <label for="priorityId"><b>Priority</b></label>
+                        <select class="form-control" id="priorityId" name="priorityId">
+                            <option th:each="prior : ${priorities}" th:value="${prior.id}" th:text="${prior.name}"
+                                    th:field="*{priority.id}" th:selected="${task.priority.id}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="description" class="form-label"><b>Description</b></label>
                         <textarea class="form-control" id="description" name="description" th:field="*{description}"
-                                  rows="10" placeholder="Write a task details"></textarea>
+                                  rows="7" placeholder="Write a task details"></textarea>
                     </div>
                     <div class="row mb-3">
                         <div class="col-6"></div>

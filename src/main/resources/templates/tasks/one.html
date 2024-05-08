@@ -20,6 +20,9 @@
                     <h2 th:text="${task.title}"/>
                     <span class="text-secondary">Creation date: </span>
                     <span th:text="${task.created}"/>
+                    <br>
+                    <span class="text-secondary">Priority: </span>
+                    <span th:text="${task.priority.name}"/>
                     <div class="mb-2" th:if="${task.done}">
                         <span class="text-secondary">Done:</span>
                         <i class="bi bi-check h5 text-success" style="vertical-align: middle"></i>
