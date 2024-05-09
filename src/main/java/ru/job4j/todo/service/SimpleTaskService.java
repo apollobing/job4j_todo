@@ -2,11 +2,15 @@ package ru.job4j.todo.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.dto.TaskDto;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.repository.CategoryRepository;
 import ru.job4j.todo.repository.PriorityRepository;
 import ru.job4j.todo.repository.TaskRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,9 +20,13 @@ public class SimpleTaskService implements TaskService {
 
     private final PriorityRepository priorityRepository;
 
-    public SimpleTaskService(TaskRepository taskRepository, PriorityRepository priorityRepository) {
+    private final CategoryRepository categoryRepository;
+
+    public SimpleTaskService(TaskRepository taskRepository, PriorityRepository priorityRepository,
+                             CategoryRepository categoryRepository) {
         this.taskRepository = taskRepository;
         this.priorityRepository = priorityRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -30,6 +38,11 @@ public class SimpleTaskService implements TaskService {
         task.setDone(taskDto.isDone());
         task.setUser(taskDto.getUser());
         task.setPriority(priorityRepository.findById(taskDto.getPriorityId()).orElseThrow());
+        List<Category> categories = new ArrayList<>();
+        for (int categoryId : taskDto.getCategoryId()) {
+            categories.add(categoryRepository.findById(categoryId).orElseThrow());
+        }
+        task.setCategories(categories);
         return taskRepository.add(task);
     }
 

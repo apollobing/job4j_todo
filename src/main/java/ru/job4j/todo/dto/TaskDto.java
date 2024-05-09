@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.job4j.todo.model.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class TaskDto {
@@ -21,4 +22,6 @@ public class TaskDto {
     private User user;
 
     private int priorityId;
+
+    private List<Integer> categoryId;
 }

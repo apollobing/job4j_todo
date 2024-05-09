@@ -23,6 +23,9 @@
                     <br>
                     <span class="text-secondary">Priority: </span>
                     <span th:text="${task.priority.name}"/>
+                    <br>
+                    <span class="text-secondary">Categories:</span>
+                    <span th:each="category : ${task.categories}" th:text="' ' + ${category.name}"></span>
                     <div class="mb-2" th:if="${task.done}">
                         <span class="text-secondary">Done:</span>
                         <i class="bi bi-check h5 text-success" style="vertical-align: middle"></i>

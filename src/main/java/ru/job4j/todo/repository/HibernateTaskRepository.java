@@ -58,7 +58,8 @@ public class HibernateTaskRepository implements TaskRepository {
     @Override
     public Optional<Task> findById(int id) {
         return hibernateCrudRepository.optional(
-                "FROM Task f JOIN FETCH f.priority JOIN FETCH f.user WHERE f.id = :fId", Task.class,
+                "FROM Task f JOIN FETCH f.priority JOIN FETCH f.user JOIN FETCH f.categories"
+                        + " WHERE f.id = :fId", Task.class,
                 Map.of("fId", id)
         );
     }
@@ -67,18 +68,21 @@ public class HibernateTaskRepository implements TaskRepository {
     public Collection<Task> findNew() {
         LocalDateTime today = LocalDate.now().atStartOfDay();
         return hibernateCrudRepository.query(
-                "FROM Task f JOIN FETCH f.priority JOIN FETCH f.user WHERE f.created >= :fToday ORDER BY f.id DESC", Task.class,
+                "FROM Task f JOIN FETCH f.priority JOIN FETCH f.user JOIN FETCH f.categories"
+                        + " WHERE f.created >= :fToday ORDER BY f.id DESC", Task.class,
                 Map.of("fToday", today)
         );
     }
 
     @Override
     public Collection<Task> findCompleted() {
-        return hibernateCrudRepository.query("FROM Task f JOIN FETCH f.priority JOIN FETCH f.user WHERE f.done = true ORDER BY f.id DESC", Task.class);
+        return hibernateCrudRepository.query("FROM Task f JOIN FETCH f.priority JOIN FETCH f.user"
+                + " JOIN FETCH f.categories WHERE f.done = true ORDER BY f.id DESC", Task.class);
     }
 
     @Override
     public Collection<Task> findAll() {
-        return hibernateCrudRepository.query("FROM Task f JOIN FETCH f.priority JOIN FETCH f.user ORDER BY f.id DESC", Task.class);
+        return hibernateCrudRepository.query("FROM Task f JOIN FETCH f.priority JOIN FETCH f.user"
+                + " JOIN FETCH f.categories ORDER BY f.id DESC", Task.class);
     }
 }

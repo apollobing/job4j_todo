@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.dto.TaskDto;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
@@ -23,9 +24,12 @@ public class TaskController {
 
     private final PriorityService priorityService;
 
-    public TaskController(TaskService taskService, PriorityService priorityService) {
+    private final CategoryService categoryService;
+
+    public TaskController(TaskService taskService, PriorityService priorityService, CategoryService categoryService) {
         this.taskService = taskService;
         this.priorityService = priorityService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/all")
@@ -63,6 +67,7 @@ public class TaskController {
     @GetMapping("/task/add")
     public String getAddPage(Model model) {
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/add";
     }
 
