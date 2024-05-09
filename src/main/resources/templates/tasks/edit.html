@@ -32,6 +32,13 @@
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="categoryId"><b>Category</b></label>
+                        <select class="form-select" multiple size="3" id="categoryId" name="categoryId" required>
+                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"
+                                    th:selected="${task.categories.contains(category)}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="description" class="form-label"><b>Description</b></label>
                         <textarea class="form-control" id="description" name="description" th:field="*{description}"
                                   rows="7" placeholder="Write a task details"></textarea>

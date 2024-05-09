@@ -38,11 +38,7 @@ public class SimpleTaskService implements TaskService {
         task.setDone(taskDto.isDone());
         task.setUser(taskDto.getUser());
         task.setPriority(priorityRepository.findById(taskDto.getPriorityId()).orElseThrow());
-        List<Category> categories = new ArrayList<>();
-        for (int categoryId : taskDto.getCategoryId()) {
-            categories.add(categoryRepository.findById(categoryId).orElseThrow());
-        }
-        task.setCategories(categories);
+        task.setCategories(getCategories(taskDto));
         return taskRepository.add(task);
     }
 
@@ -52,6 +48,7 @@ public class SimpleTaskService implements TaskService {
         task.setTitle(taskDto.getTitle());
         task.setDescription(taskDto.getDescription());
         task.setPriority(priorityRepository.findById(taskDto.getPriorityId()).orElseThrow());
+        task.setCategories(getCategories(taskDto));
         return taskRepository.edit(task);
     }
 
@@ -83,5 +80,13 @@ public class SimpleTaskService implements TaskService {
     @Override
     public Collection<Task> findAll() {
         return taskRepository.findAll();
+    }
+
+    private List<Category> getCategories(TaskDto taskDto) {
+        List<Category> categories = new ArrayList<>();
+        for (int categoryId : taskDto.getCategoryId()) {
+            categories.add(categoryRepository.findById(categoryId).orElseThrow());
+        }
+        return categories;
     }
 }

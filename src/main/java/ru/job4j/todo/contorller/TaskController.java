@@ -110,6 +110,7 @@ public class TaskController {
         }
         model.addAttribute("priorities", priorityService.findAll());
         model.addAttribute("task", task.get());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/edit";
     }
 

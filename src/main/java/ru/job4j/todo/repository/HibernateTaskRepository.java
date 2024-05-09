@@ -29,13 +29,11 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public boolean edit(Task task) {
-        return hibernateCrudRepository.run(
-                "UPDATE Task SET title = :fTitle,"
-                        + " description = :fDescription,"
-                        + " priority = :fPriority,"
-                        + " done = :fDone WHERE id = :fId",
-                Map.of("fTitle", task.getTitle(), "fDescription", task.getDescription(),
-                        "fPriority", task.getPriority(), "fDone", task.isDone(), "fId", task.getId())
+        return hibernateCrudRepository.run(session -> {
+                    session.merge(task);
+                    session.flush();
+                    return task.getId() > 0;
+                }
         );
     }
 
