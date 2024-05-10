@@ -22,7 +22,7 @@
                     <div class="mb-3">
                         <label for="title" class="form-label"><b>Title</b></label>
                         <input type="text" class="form-control" id="title" name="title" th:field="*{title}"
-                               placeholder="Title of a task">
+                               placeholder="Title of a task" required>
                     </div>
                     <div class="mb-3">
                         <label for="priorityId"><b>Priority</b></label>
@@ -41,7 +41,7 @@
                     <div class="mb-3">
                         <label for="description" class="form-label"><b>Description</b></label>
                         <textarea class="form-control" id="description" name="description" th:field="*{description}"
-                                  rows="7" placeholder="Write a task details"></textarea>
+                                  rows="7" placeholder="Write a task details" required></textarea>
                     </div>
                     <div class="row mb-3">
                         <div class="col-6"></div>

@@ -8,7 +8,6 @@ import ru.job4j.todo.repository.CategoryRepository;
 import ru.job4j.todo.repository.PriorityRepository;
 import ru.job4j.todo.repository.TaskRepository;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -83,10 +82,9 @@ public class SimpleTaskService implements TaskService {
     }
 
     private List<Category> getCategories(TaskDto taskDto) {
-        List<Category> categories = new ArrayList<>();
-        for (int categoryId : taskDto.getCategoryId()) {
-            categories.add(categoryRepository.findById(categoryId).orElseThrow());
-        }
-        return categories;
+        Collection<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .filter(category -> taskDto.getCategoryId().contains(category.getId()))
+                .toList();
     }
 }
