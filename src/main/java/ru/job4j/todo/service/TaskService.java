@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface TaskService {
 
-    Task add(TaskDto dto);
+    Task add(TaskDto taskDto);
 
-    boolean edit(TaskDto dto);
+    boolean edit(TaskDto taskDto);
 
     boolean changeStatus(int id);
 

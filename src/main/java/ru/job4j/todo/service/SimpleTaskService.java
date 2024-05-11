@@ -2,14 +2,13 @@ package ru.job4j.todo.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.dto.TaskDto;
-import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.repository.CategoryRepository;
 import ru.job4j.todo.repository.PriorityRepository;
 import ru.job4j.todo.repository.TaskRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,7 +36,7 @@ public class SimpleTaskService implements TaskService {
         task.setDone(taskDto.isDone());
         task.setUser(taskDto.getUser());
         task.setPriority(priorityRepository.findById(taskDto.getPriorityId()).orElseThrow());
-        task.setCategories(getCategories(taskDto));
+        task.setCategories(new ArrayList<>(categoryRepository.findSelected(taskDto)));
         return taskRepository.add(task);
     }
 
@@ -47,7 +46,7 @@ public class SimpleTaskService implements TaskService {
         task.setTitle(taskDto.getTitle());
         task.setDescription(taskDto.getDescription());
         task.setPriority(priorityRepository.findById(taskDto.getPriorityId()).orElseThrow());
-        task.setCategories(getCategories(taskDto));
+        task.setCategories(new ArrayList<>(categoryRepository.findSelected(taskDto)));
         return taskRepository.edit(task);
     }
 
@@ -79,12 +78,5 @@ public class SimpleTaskService implements TaskService {
     @Override
     public Collection<Task> findAll() {
         return taskRepository.findAll();
-    }
-
-    private List<Category> getCategories(TaskDto taskDto) {
-        Collection<Category> categories = categoryRepository.findAll();
-        return categories.stream()
-                .filter(category -> taskDto.getCategoryId().contains(category.getId()))
-                .toList();
     }
 }

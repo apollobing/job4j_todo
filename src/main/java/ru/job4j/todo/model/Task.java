@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -44,5 +43,5 @@ public class Task {
             joinColumns = { @JoinColumn(name = "task_id") },
             inverseJoinColumns = { @JoinColumn(name = "category_id") }
     )
-    private List<Category> categories = new ArrayList<>();
+    private List<Category> categories;
 }
