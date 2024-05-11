@@ -7,6 +7,8 @@ import ru.job4j.todo.repository.CategoryRepository;
 import ru.job4j.todo.repository.PriorityRepository;
 import ru.job4j.todo.repository.TaskRepository;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -62,21 +64,36 @@ public class SimpleTaskService implements TaskService {
 
     @Override
     public Optional<Task> findById(int id) {
-        return taskRepository.findById(id);
+        Task task = taskRepository.findById(id).orElseThrow();
+        setUserTimezoneToTask(task);
+        return Optional.of(task);
     }
 
     @Override
     public Collection<Task> findNew() {
-        return taskRepository.findNew();
+        return setUserTimezoneToTasks(taskRepository.findNew());
     }
 
     @Override
     public Collection<Task> findCompleted() {
-        return taskRepository.findCompleted();
+        return setUserTimezoneToTasks(taskRepository.findCompleted());
     }
 
     @Override
     public Collection<Task> findAll() {
-        return taskRepository.findAll();
+        return setUserTimezoneToTasks(taskRepository.findAll());
+    }
+
+    public void setUserTimezoneToTask(Task task) {
+        task.setCreated(ZonedDateTime.of(task.getCreated(), ZoneId.of("UTC"))
+                        .withZoneSameInstant(ZoneId.of(task.getUser().getTimezone()))
+                        .toLocalDateTime());
+    }
+
+    public Collection<Task> setUserTimezoneToTasks(Collection<Task> tasks) {
+        for (Task task : tasks) {
+            setUserTimezoneToTask(task);
+        }
+        return tasks;
     }
 }

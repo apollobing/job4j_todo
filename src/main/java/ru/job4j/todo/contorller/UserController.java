@@ -27,7 +27,8 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String getRegistrationPage() {
+    public String getRegistrationPage(Model model) {
+        model.addAttribute("timezones", userService.getTimezones());
         return "users/register";
     }
 
