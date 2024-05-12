@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class Task {
 
     private String description;
 
-    private LocalDateTime created = LocalDateTime.now().withNano(0);
+    private LocalDateTime created = LocalDateTime.now(ZoneId.of("UTC")).withNano(0);
 
     private boolean done;
 

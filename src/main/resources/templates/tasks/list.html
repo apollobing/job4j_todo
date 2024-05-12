@@ -31,7 +31,7 @@
                         <td><a th:text="${task.title}"
                                th:href="@{/tasks/task/{taskId}(taskId=${task.id})}"></a>
                         </td>
-                        <td th:text="${task.created}"/>
+                        <td th:text="${#temporals.format(task.created, 'dd.MM.yyyy HH:mm')}"></td>
                         <td th:text="${task.priority.name}"/>
                         <td th:text="${task.user.name}"/>
                         <td>

@@ -19,7 +19,7 @@
                 <div class="pt-4 pb-4">
                     <h2 th:text="${task.title}"/>
                     <span class="text-secondary">Creation date: </span>
-                    <span th:text="${task.created}"/>
+                    <span th:text="${#temporals.format(task.created, 'dd.MM.yyyy HH:mm')}"/>
                     <br>
                     <span class="text-secondary">Priority: </span>
                     <span th:text="${task.priority.name}"/>
