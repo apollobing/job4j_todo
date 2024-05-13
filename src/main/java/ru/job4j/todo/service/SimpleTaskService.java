@@ -1,8 +1,11 @@
 package ru.job4j.todo.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import ru.job4j.todo.dto.TaskDto;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.repository.CategoryRepository;
 import ru.job4j.todo.repository.PriorityRepository;
 import ru.job4j.todo.repository.TaskRepository;
@@ -85,8 +88,10 @@ public class SimpleTaskService implements TaskService {
     }
 
     public void setUserTimezoneToTask(Task task) {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        User user = (User) attr.getRequest().getSession(true).getAttribute("user");
         task.setCreated(ZonedDateTime.of(task.getCreated(), ZoneId.of("UTC"))
-                        .withZoneSameInstant(ZoneId.of(task.getUser().getTimezone()))
+                        .withZoneSameInstant(ZoneId.of(user.getTimezone()))
                         .toLocalDateTime());
     }
 
