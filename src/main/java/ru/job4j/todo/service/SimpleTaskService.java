@@ -1,8 +1,6 @@
 package ru.job4j.todo.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import ru.job4j.todo.dto.TaskDto;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
@@ -67,37 +65,35 @@ public class SimpleTaskService implements TaskService {
 
     @Override
     public Optional<Task> findById(int id) {
-        Task task = taskRepository.findById(id).orElseThrow();
-        setUserTimezoneToTask(task);
-        return Optional.of(task);
+        return Optional.of(taskRepository.findById(id).orElseThrow());
     }
 
     @Override
     public Collection<Task> findNew() {
-        return setUserTimezoneToTasks(taskRepository.findNew());
+        return taskRepository.findNew();
     }
 
     @Override
     public Collection<Task> findCompleted() {
-        return setUserTimezoneToTasks(taskRepository.findCompleted());
+        return taskRepository.findCompleted();
     }
 
     @Override
     public Collection<Task> findAll() {
-        return setUserTimezoneToTasks(taskRepository.findAll());
+        return taskRepository.findAll();
     }
 
-    public void setUserTimezoneToTask(Task task) {
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        User user = (User) attr.getRequest().getSession(true).getAttribute("user");
+    @Override
+    public void setUserTimezoneToTask(Task task, User user) {
         task.setCreated(ZonedDateTime.of(task.getCreated(), ZoneId.of("UTC"))
-                        .withZoneSameInstant(ZoneId.of(user.getTimezone()))
-                        .toLocalDateTime());
+                .withZoneSameInstant(ZoneId.of(user.getTimezone()))
+                .toLocalDateTime());
     }
 
-    public Collection<Task> setUserTimezoneToTasks(Collection<Task> tasks) {
+    @Override
+    public Collection<Task> setUserTimezoneToTasks(Collection<Task> tasks, User user) {
         for (Task task : tasks) {
-            setUserTimezoneToTask(task);
+            setUserTimezoneToTask(task, user);
         }
         return tasks;
     }

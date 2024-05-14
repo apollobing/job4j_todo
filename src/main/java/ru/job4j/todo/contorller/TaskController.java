@@ -33,25 +33,26 @@ public class TaskController {
     }
 
     @GetMapping("/all")
-    public String getAll(Model model) {
-        model.addAttribute("tasks", taskService.findAll());
+    public String getAll(Model model, @SessionAttribute User user) {
+        model.addAttribute("tasks", taskService.setUserTimezoneToTasks(taskService.findAll(), user));
         return "tasks/list";
     }
 
     @GetMapping("/completed")
-    public String getCompleted(Model model) {
-        model.addAttribute("tasks", taskService.findCompleted());
+    public String getCompleted(Model model, @SessionAttribute User user) {
+        model.addAttribute("tasks", taskService.setUserTimezoneToTasks(taskService.findCompleted(), user));
         return "tasks/list";
     }
 
     @GetMapping("/new")
-    public String getNew(Model model) {
-        model.addAttribute("tasks", taskService.findNew());
+    public String getNew(Model model, @SessionAttribute User user) {
+        model.addAttribute("tasks", taskService.setUserTimezoneToTasks(taskService.findNew(), user));
         return "tasks/list";
     }
 
     @GetMapping("/task/{id}")
-    public String getById(Model model, @PathVariable int id, HttpServletResponse response) {
+    public String getById(Model model, @PathVariable int id, HttpServletResponse response,
+                          @SessionAttribute User user) {
         Optional<Task> task = taskService.findById(id);
         if (task.isEmpty()) {
             response.setStatus(HttpStatus.NOT_FOUND.value());
@@ -59,6 +60,7 @@ public class TaskController {
                     + " because this task not found");
             return "errors/error";
         }
+        taskService.setUserTimezoneToTask(task.get(), user);
         model.addAttribute("priorities", priorityService.findAll());
         model.addAttribute("task", task.get());
         return "tasks/one";
